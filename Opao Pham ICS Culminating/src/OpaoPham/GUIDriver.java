@@ -50,8 +50,8 @@ public class GUIDriver extends Application {
 		stage.setTitle("Graphical Memory Game OP");
 
 		// message
-		Text message = new Text(185, 50, "Memory Game");
-		message.setFont(Font.font("Helvetica", 45));
+		Text titleBox = new Text(185, 50, "Memory Game");
+		titleBox.setFont(Font.font("Helvetica", 45));
 		
 
 		// VBRow 1
@@ -60,7 +60,7 @@ public class GUIDriver extends Application {
 		gridpaneVB1.setVgap(20);
 		gridpaneVB1.setAlignment(Pos.CENTER);
 
-		Label message1 = new Label("Find and match all the cards before the timer runs out!");
+		Label message1 = new Label("Find and match all the cards");
 		message1.setFont(Font.font("Helvetica", 25));
 		message1.setAlignment(Pos.CENTER);
 		gridpaneVB1.add(message1, 0, 0);
@@ -135,21 +135,13 @@ public class GUIDriver extends Application {
 		rootVB.getChildren().addAll(gridpaneVB4);
 		rootVB.getChildren().addAll(gridpaneVBB);
 		
-		root.getChildren().add(message);
+		root.getChildren().add(titleBox);
 		root.getChildren().addAll(rootVB);  //add Vbox inside pane
 		root.getChildren().add(message5);
 		
 		// DONT TOUCH
 		stage.setScene(scene);
 		stage.show();
-	}
-	
-
-	// ALSO DONT TOUCH
-	public static void main(String[] args) {
-		createCardPairs();
-		setUpCardLayout();
-		launch(args);
 	}
 	
 	public static void createCardPairs() {
@@ -226,5 +218,33 @@ public class GUIDriver extends Application {
 		//Setting a graphic to the button
 		cardbutton.setGraphic(null);
 	}
+	
+	public static void playingScene(Stage scene2) {
+		Label titleBox = new Label("Memory Game");
+		titleBox.setFont(new Font(30));
+		
+		if(deck.isCardMatch()){
+			Label matchMsg = new Label("Match!");
+			matchMsg.setFont(new Font(30));
+		}
+		else {
+			Label notMatch = new Label("Not match!");
+			notMatch.setFont(new Font(30));
+		}
+        
+        StackPane stack_pane = new StackPane(titleBox);
+        Scene scene = new Scene(stack_pane, 400, 300);
+
+        scene2.setScene(scene);
+
+        scene2.show();
+	}
+	
+	// ALSO DONT TOUCH
+		public static void main(String[] args) {
+			createCardPairs();
+			setUpCardLayout();
+			launch(args);
+		}
 
 }

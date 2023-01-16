@@ -21,10 +21,18 @@ public class Deck {
 	
 	//Work on
 	public boolean getFaceUpCardsStatus() {
+		int numOfFaceUpCards = 5;
+		
 		//Count the number of face up cards
+		
 		//If 2> return false
-		//else true
-		return true;
+		if (numOfFaceUpCards <= 2) {
+			return false;
+		}
+		else {
+			return true;
+		}
+		
 	}
 	
 	public void addFacedUpCard(Card card) {
@@ -35,12 +43,19 @@ public class Deck {
 		faceUpcards.clear();
 	}
 	
+	
 	public ArrayList<Card> getFacedUpCards() {
+
 		return faceUpcards;
 	}
 
 	public boolean trackFaceUpCards() {
 		return true;
 	}
+	
+	public boolean isCardMatch() {
+		return true;
+	}
+
 
 }
