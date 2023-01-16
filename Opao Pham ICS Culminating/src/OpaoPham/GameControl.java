@@ -3,7 +3,6 @@ package OpaoPham;
 public class GameControl {
 	private boolean playerReady = true;
 	private int score;
-	private int numLives = 6;
 	private boolean gameOver = true;
 	private int numPairs;
 	
