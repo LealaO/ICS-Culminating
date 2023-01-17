@@ -237,8 +237,6 @@ public class GUIDriver extends Application {
 	        scene2.setScene(scene);
 	
 	        scene2.show();
-		
-	        
 	     
 	}
 

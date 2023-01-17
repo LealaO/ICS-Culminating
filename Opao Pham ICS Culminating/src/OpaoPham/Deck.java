@@ -23,7 +23,7 @@ public class Deck {
 	public boolean getFaceUpCardsStatus() {
 		int numOfFaceUpCards = faceUpcards.size();
 		
-		//If 2> return false
+		//If the the number of face up cards is equal to or greater than 2, return false
 		if (numOfFaceUpCards <= 2) {
 			return false;
 		}
@@ -43,6 +43,7 @@ public class Deck {
 	
 	
 	public ArrayList<Card> getFacedUpCards() {
+		
 		return faceUpcards;
 	}
 
