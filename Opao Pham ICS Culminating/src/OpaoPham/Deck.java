@@ -21,9 +21,7 @@ public class Deck {
 	
 	//Work on
 	public boolean getFaceUpCardsStatus() {
-		int numOfFaceUpCards = 5;
-		
-		//Count the number of face up cards
+		int numOfFaceUpCards = faceUpcards.size();
 		
 		//If 2> return false
 		if (numOfFaceUpCards <= 2) {
@@ -45,11 +43,11 @@ public class Deck {
 	
 	
 	public ArrayList<Card> getFacedUpCards() {
-
 		return faceUpcards;
 	}
 
 	public boolean trackFaceUpCards() {
+		
 		return true;
 	}
 	

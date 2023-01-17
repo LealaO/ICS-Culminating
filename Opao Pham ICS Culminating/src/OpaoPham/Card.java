@@ -6,18 +6,18 @@ public class Card extends Button {
 	// TODO Auto-generated constructor stub
 	private int row;
 	private int column;
-	private String cardlocname;
+	private String cardLocName ;
 
 	public Card(String cln) {
 		super();
-		cardlocname = cln;
+		cardLocName = cln;
 	}
 		
 	public Card(int r, int c, String cln) {
 		super();
 		row = r;
 		column = c;
-		cardlocname = cln;
+		cardLocName = cln;
 	}
 
 	public void setRowColumn(int r, int c) {
@@ -34,7 +34,7 @@ public class Card extends Button {
 	}
 	
 	public String getCardLocName() {
-		return cardlocname;
+		return cardLocName;
 	}
 
 	// to-do toString?
