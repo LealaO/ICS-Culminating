@@ -26,6 +26,8 @@ import javafx.stage.Stage;
 
 public class GUIDriver extends Application {
 
+	private Stage stg;
+
 	private static final double WIDTH = 650;
 	private static final double HEIGHT = 650;
 
@@ -38,112 +40,37 @@ public class GUIDriver extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		this.stg = stage;
 		Pane root = new Pane();
-		VBox rootVB = new VBox();
-		rootVB.setSpacing(30);
 
 		// background
-		Scene scene = new Scene(root, WIDTH, HEIGHT, Color.MEDIUMPURPLE);
+		Scene TitleScene = new Scene(root, WIDTH, HEIGHT, Color.MEDIUMPURPLE);
 
 		// Title of program
 		stage.setTitle("Graphical Memory Game OP");
 
-		// message
+		// Title
 		Text titleBox = new Text(185, 50, "Memory Game");
 		titleBox.setFont(Font.font("Helvetica", 45));
 
-		// VBRow 1
-		GridPane gridpaneVB1 = new GridPane();
-		gridpaneVB1.setHgap(20);
-		gridpaneVB1.setVgap(20);
-		gridpaneVB1.setAlignment(Pos.CENTER);
+		// Footer
+		Text footerMessage = new Text(220, 610, "Ready to begin?");
+		footerMessage.setFont(Font.font("Helvetica", 30));
 
-		Label message1 = new Label("Find and match all the cards");
-		message1.setFont(Font.font("Helvetica", 25));
-		message1.setAlignment(Pos.CENTER);
-		gridpaneVB1.add(message1, 0, 0);
-
-		// VBRow 2
-		GridPane gridpaneVB2 = new GridPane();
-		gridpaneVB2.setHgap(20);
-		gridpaneVB2.setVgap(20);
-		gridpaneVB2.setAlignment(Pos.CENTER);
-
-		Label message2 = new Label("***Scoring Mechanism***");
-		message2.setFont(Font.font("Helvetica", 30));
-		gridpaneVB2.add(message2, 0, 0);
-		gridpaneVB2.setAlignment(Pos.CENTER);
-
-		// VBRow 3
-		GridPane gridpaneVB3 = new GridPane();
-		gridpaneVB3.setHgap(5);
-		gridpaneVB3.setVgap(1);
-		gridpaneVB3.setAlignment(Pos.CENTER);
-
-		Text message3 = new Text("1. The number of times you have flipped a card is a deduction to your total score");
-		message3.setFont(Font.font("Helvetica", 17));
-		gridpaneVB3.add(message3, 0, 1);
-
-		Text message4 = new Text("2. You also have set number of lives");
-		message4.setFont(Font.font("Helvetica", 17));
-		gridpaneVB3.add(message4, 0, 2);
-
-		// VBRow 4
-		GridPane gridpaneVB4 = new GridPane();
-		gridpaneVB4.setHgap(5);
-		gridpaneVB4.setVgap(1);
-		gridpaneVB4.setAlignment(Pos.CENTER);
-
-		// Left Image
-		Image leftImage = new Image(
-				"https://cdn0.iconfinder.com/data/icons/symbols-symbols-add-on-3-vol-1/48/v-29-512.png", 150, 0, true,
-				false);
-		gridpaneVB4.add(new ImageView(leftImage), 0, 0);
-
-		// Right Image
-		Image rightImage = new Image(
-				"https://cdn0.iconfinder.com/data/icons/symbols-symbols-add-on-3-vol-1/48/v-29-512.png", 150, 0, true,
-				false);
-		gridpaneVB4.add(new ImageView(rightImage), 1, 0);
-
-		// Buttons (Reduce, Add, Multiply)
-		GridPane gridpaneVBB = new GridPane();
-		gridpaneVBB.setHgap(20);
-		gridpaneVBB.setVgap(1);
-		gridpaneVBB.setAlignment(Pos.BOTTOM_CENTER);
-
-		// Start button
-		Button startbtn = new Button("Start Game!");
-		startbtn.setFont(Font.font("Helvetica", 30));
-		gridpaneVBB.add(startbtn, 0, 30);
-
-		// VBRow 4
-		Text message5 = new Text(220, 610, "Ready to begin?");
-		message5.setFont(Font.font("Helvetica", 30));
-
+		
+		Button startbtn = startScene(root, stage, titleBox, footerMessage);
+		
 		// logic
 		startbtn.setOnAction(e -> {
+			stage.setScene(playingScene(titleBox));
 
 		});
 
-		// Adds Objects to Layout
-		rootVB.setLayoutX(20);
-		rootVB.setLayoutY(70);
-		rootVB.setAlignment(Pos.CENTER);
-		rootVB.getChildren().addAll(gridpaneVB1);
-		rootVB.getChildren().addAll(gridpaneVB2);
-		rootVB.getChildren().addAll(gridpaneVB3);
-		rootVB.getChildren().addAll(gridpaneVB4);
-		rootVB.getChildren().addAll(gridpaneVBB);
-
-		root.getChildren().add(titleBox);
-		root.getChildren().addAll(rootVB); // add Vbox inside pane
-		root.getChildren().add(message5);
-
 		// DONT TOUCH
-		stage.setScene(scene);
+		stage.setScene(TitleScene);
 		stage.show();
 	}
+
 
 	public static void createCardPairs() {
 		ArrayList<Card> randomCards = new ArrayList<Card>();
@@ -217,28 +144,123 @@ public class GUIDriver extends Application {
 		cardbutton.setGraphic(null);
 	}
 
-	public void playingScene(Stage scene2) {
+	/**
+	 * @param stage
+	 * @param titleBox
+	 */
+	public Button startScene(Pane root, Stage stage, Text titleBox, Text footerMessage) {
+		VBox rootVB = new VBox();
+		rootVB.setSpacing(30);
 
-			Label titleBox = new Label("Memory Game");
-			titleBox.setFont(new Font(30));
-			
-			if(deck.isCardMatch()){
-				Label matchMsg = new Label("Match!");
-				matchMsg.setFont(new Font(30));
-			}
-			else {
-				Label notMatch = new Label("Not match!");
-				notMatch.setFont(new Font(30));
-			}
-	        
-	        StackPane stack_pane = new StackPane(titleBox);
-	        Scene scene = new Scene(stack_pane, 400, 300);
-	
-	        scene2.setScene(scene);
-	
-	        scene2.show();
-	     
+		VBox rootVB2 = new VBox();
+		rootVB2.setSpacing(30);
+
+		// VBRow 1
+		GridPane gridpaneVB1 = new GridPane();
+		gridpaneVB1.setHgap(20);
+		gridpaneVB1.setVgap(20);
+		gridpaneVB1.setAlignment(Pos.CENTER);
+
+		Label message1 = new Label("Find and match all the cards");
+		message1.setFont(Font.font("Helvetica", 25));
+		message1.setAlignment(Pos.CENTER);
+		gridpaneVB1.add(message1, 0, 0);
+
+		// VBRow 2
+		GridPane gridpaneVB2 = new GridPane();
+		gridpaneVB2.setHgap(20);
+		gridpaneVB2.setVgap(20);
+		gridpaneVB2.setAlignment(Pos.CENTER);
+
+		Label message2 = new Label("***Scoring Mechanism***");
+		message2.setFont(Font.font("Helvetica", 30));
+		gridpaneVB2.add(message2, 0, 0);
+		gridpaneVB2.setAlignment(Pos.CENTER);
+
+		// VBRow 3
+		GridPane gridpaneVB3 = new GridPane();
+		gridpaneVB3.setHgap(5);
+		gridpaneVB3.setVgap(1);
+		gridpaneVB3.setAlignment(Pos.CENTER);
+
+		Text message3 = new Text("1. The number of times you have flipped a card is a deduction to your total score");
+		message3.setFont(Font.font("Helvetica", 17));
+		gridpaneVB3.add(message3, 0, 1);
+
+		Text message4 = new Text("2. You also have set number of lives");
+		message4.setFont(Font.font("Helvetica", 17));
+		gridpaneVB3.add(message4, 0, 2);
+
+		// VBRow 4
+		GridPane gridpaneVB4 = new GridPane();
+		gridpaneVB4.setHgap(5);
+		gridpaneVB4.setVgap(1);
+		gridpaneVB4.setAlignment(Pos.CENTER);
+
+		// Left Image
+		Image leftImage = new Image(
+				"https://cdn0.iconfinder.com/data/icons/symbols-symbols-add-on-3-vol-1/48/v-29-512.png", 150, 0, true,
+				false);
+		gridpaneVB4.add(new ImageView(leftImage), 0, 0);
+
+		// Right Image
+		Image rightImage = new Image(
+				"https://cdn0.iconfinder.com/data/icons/symbols-symbols-add-on-3-vol-1/48/v-29-512.png", 150, 0, true,
+				false);
+		gridpaneVB4.add(new ImageView(rightImage), 1, 0);
+
+		// Buttons (Reduce, Add, Multiply)
+		GridPane gridpaneVBB = new GridPane();
+		gridpaneVBB.setHgap(20);
+		gridpaneVBB.setVgap(1);
+		gridpaneVBB.setAlignment(Pos.BOTTOM_CENTER);
+
+		// Start button
+		Button startbtn = new Button("Start Game!");
+		startbtn.setFont(Font.font("Helvetica", 30));
+		gridpaneVBB.add(startbtn, 0, 30);
+
+		// Adds Objects to Layout
+		rootVB.setLayoutX(20);
+		rootVB.setLayoutY(70);
+		rootVB.setAlignment(Pos.CENTER);
+		rootVB.getChildren().addAll(gridpaneVB1);
+		rootVB.getChildren().addAll(gridpaneVB2);
+		rootVB.getChildren().addAll(gridpaneVB3);
+		rootVB.getChildren().addAll(gridpaneVB4);
+		rootVB.getChildren().addAll(gridpaneVBB);
+
+		root.getChildren().add(titleBox);
+		root.getChildren().addAll(rootVB); // add Vbox inside pane
+		root.getChildren().add(footerMessage);
+		return startbtn;
 	}
+
+	public Scene playingScene(Text titleBox) {
+
+		Pane root = new Pane();
+		
+		Text matchMsg = null;
+        if (deck.isCardMatch()) {
+            matchMsg = new Text(220, 610, "Match!");
+            matchMsg.setFont(new Font("Helvetica", 30));
+        } else {
+        	matchMsg = new Text(220, 610, "Not match!");
+        	matchMsg.setFont(new Font("Helvetica", 30));
+        }
+
+        StackPane stack_pane = new StackPane();
+        
+		root.getChildren().add(titleBox);
+		root.getChildren().add(stack_pane); 
+		root.getChildren().add(matchMsg);
+
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
+
+        return scene;
+
+    }
+
 
 	// ALSO DONT TOUCH
 	public static void main(String[] args) {

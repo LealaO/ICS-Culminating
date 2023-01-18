@@ -1,7 +1,6 @@
 package OpaoPham;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Deck {
 	private ArrayList<Card> cards;
@@ -22,8 +21,6 @@ public class Deck {
 	//Work on
 	public boolean getFaceUpCardsStatus() {
 		int numOfFaceUpCards = faceUpcards.size();
-		
-		//If the the number of face up cards is equal to or greater than 2, return false
 		if (numOfFaceUpCards <= 2) {
 			return false;
 		}
@@ -43,7 +40,7 @@ public class Deck {
 	
 	
 	public ArrayList<Card> getFacedUpCards() {
-		
+	
 		return faceUpcards;
 	}
 
@@ -53,7 +50,17 @@ public class Deck {
 	}
 	
 	public boolean isCardMatch() {
-		return true;
+		for(int i = 0; i < faceUpcards.size();) {
+			if(faceUpcards.get(i) == faceUpcards.get(i+1)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		return false;
+		
+		
 	}
 
 
