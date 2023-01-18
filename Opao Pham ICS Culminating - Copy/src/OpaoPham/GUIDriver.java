@@ -28,8 +28,6 @@ public class GUIDriver extends Application {
 
 	private Stage stg;
 
-	private static String folderPath = System.getProperty("user.dir");
-
 	private static final double WIDTH = 650;
 	private static final double HEIGHT = 650;
 
@@ -43,7 +41,14 @@ public class GUIDriver extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		this.stg = stage;
+
 		Pane root = new Pane();
+		VBox rootVB = new VBox();
+		rootVB.setSpacing(30);
+
+		Pane root2 = new Pane();
+		VBox rootVB2 = new VBox();
+		rootVB2.setSpacing(30);
 
 		// background
 		Scene TitleScene = new Scene(root, WIDTH, HEIGHT, Color.MEDIUMPURPLE);
@@ -51,119 +56,9 @@ public class GUIDriver extends Application {
 		// Title of program
 		stage.setTitle("Graphical Memory Game OP");
 
-		// Title
+		// message
 		Text titleBox = new Text(185, 50, "Memory Game");
 		titleBox.setFont(Font.font("Helvetica", 45));
-
-		// Footer
-		Text footerMessage = new Text(220, 610, "Ready to begin?");
-		footerMessage.setFont(Font.font("Helvetica", 30));
-
-		Button startbtn = startScene(root, stage, titleBox, footerMessage);
-
-		// logic
-		startbtn.setOnAction(e -> {
-			stage.setScene(playingScene(titleBox));
-
-		});
-
-		// DONT TOUCH
-		stage.setScene(TitleScene);
-		stage.show();
-	}
-
-	public static void createCardPairs() {
-		ArrayList<Card> randomCards = new ArrayList<Card>();
-		for (int i = 0; i < 11; i += 2) {
-			Card card1 = new Card(folderPath + "\\" + i + ".png");
-			randomCards.add(card1);
-			Card card2 = new Card(folderPath + "\\" + i + ".png");
-			randomCards.add(card2);
-
-			// System.out.print(folderPath + "\\" + i + ".png");
-		}
-		Collections.shuffle(randomCards);
-
-		deck = new Deck(randomCards); // Initialize the Deck
-	}
-
-	public static void setUpCardLayout() {
-		int k = 0;
-		// setup slots as NewButton objects, creating button
-		for (int i = 0; i < NUM_ROWS; i++) {
-			for (int j = 0; j < NUM_COLS; j++) {
-				Card cardButton = deck.getDeck().get(k);
-				cardButton.setRowColumn(i, k);
-				slots[i][j] = cardButton;
-			//	slots[i][j].setMinSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
-			//	slots[i][j].setMaxSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
-				
-				slots[i][j].setMinSize(100, 150);
-				slots[i][j].setMaxSize(100, 150);
-
-				slots[i][j].setOnAction(e -> {
-					Card currentCard = (Card) e.getSource();
-
-					// Logic to faceUp & FaceDown
-					// validate if 2 less cards are faceup
-					if (deck.getFaceUpCardsStatus()) {
-						faceUpCard(currentCard); // UI
-					} else {
-						faceDownCards(currentCard);
-					}
-				});
-
-				k++;
-			}
-		}
-	}
-
-	public static void addCardsToGrid(GridPane gridPane) {
-		for (int i = 0; i < NUM_ROWS; i++) {
-			for (int j = 0; j < NUM_COLS; j++) {
-				gridPane.add(slots[i][j], j, i + 1);
-			}
-		}
-	}
-
-	public static void faceUpCard(Card currentCard) {
-		int butsize = 80;
-		Image img = new Image(currentCard.getCardLocName());
-		ImageView view = new ImageView(img);
-		view.setFitHeight(butsize);
-		view.setPreserveRatio(true);
-		currentCard.setPrefSize(butsize, butsize);
-		// Setting a graphic to the button
-		currentCard.setGraphic(view);
-
-		deck.addFacedUpCard(currentCard);
-	}
-
-	public static void faceDownCards(Card currentCard) {
-		ArrayList<Card> faceUpCards = deck.getFacedUpCards();
-		for (int i = 0; i < faceUpCards.size(); i++) {
-			faceDownCard(faceUpCards.get(i));
-		}
-		deck.removeFaceUpCards();
-		faceUpCard(currentCard);
-	}
-
-	// Faces down a specific card
-	public static void faceDownCard(Card cardbutton) {
-		// Setting a graphic to the button
-		cardbutton.setGraphic(null);
-	}
-
-	/**
-	 * @param stage
-	 * @param titleBox
-	 */
-	public Button startScene(Pane root, Stage stage, Text titleBox, Text footerMessage) {
-		VBox rootVB = new VBox();
-		rootVB.setSpacing(30);
-
-		VBox rootVB2 = new VBox();
-		rootVB2.setSpacing(30);
 
 		// VBRow 1
 		GridPane gridpaneVB1 = new GridPane();
@@ -230,6 +125,16 @@ public class GUIDriver extends Application {
 		startbtn.setFont(Font.font("Helvetica", 30));
 		gridpaneVBB.add(startbtn, 0, 30);
 
+		// VBRow 4
+		Text message5 = new Text(220, 610, "Ready to begin?");
+		message5.setFont(Font.font("Helvetica", 30));
+
+		// logic
+		startbtn.setOnAction(e -> {
+			stage.setScene(playingScene());
+
+		});
+
 		// Adds Objects to Layout
 		rootVB.setLayoutX(20);
 		rootVB.setLayoutY(70);
@@ -242,55 +147,110 @@ public class GUIDriver extends Application {
 
 		root.getChildren().add(titleBox);
 		root.getChildren().addAll(rootVB); // add Vbox inside pane
-		root.getChildren().add(footerMessage);
-		return startbtn;
+		root.getChildren().add(message5);
+
+		// DONT TOUCH
+		stage.setScene(TitleScene);
+		stage.show();
 	}
 
-	public Scene playingScene(Text titleBox) {
-		Pane root = new Pane();
-		GridPane gridPane = new GridPane();
-
-		setUpCardLayout();
-		addCardsToGrid(gridPane);
-
-		gridPane.setMinSize(200, 100);
-		gridPane.setPadding(new Insets(20, 20, 20, 20));
-		gridPane.setVgap(50);
-		gridPane.setHgap(50);
-
-		// Setting the Grid alignment
-		gridPane.setAlignment(Pos.CENTER);
-
-		Text matchMsg = null;
-		if (deck.isCardMatch()) {
-			matchMsg = new Text(250, 610, "Match!");
-			matchMsg.setFont(new Font("Helvetica", 30));
-		} else {
-			matchMsg = new Text(250, 610, "Not match!");
-			matchMsg.setFont(new Font("Helvetica", 30));
+	public static void createCardPairs() {
+		ArrayList<Card> randomCards = new ArrayList<Card>();
+		for (int i = 0; i < 11; i += 2) {
+			Card card = new Card(i + ".png");
+			randomCards.add(card);
+			randomCards.add(card);
 		}
+		Collections.shuffle(randomCards);
 
-		root.getChildren().add(titleBox);
-		root.getChildren().add(gridPane);
-		root.getChildren().add(matchMsg);
-
-		Scene scene = new Scene(root, WIDTH, HEIGHT);
-
-		return scene;
-
+		deck = new Deck(randomCards); // Initialize the Deck
 	}
 
-	public Scene endScene() {
-		Pane root = new Pane();
+	public static void setUpCardLayout() {
+		int k = 0;
+		// setup slots as NewButton objects, creating button
+		for (int i = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++) {
+				Card cardButton = deck.getDeck().get(k);
+				cardButton.setRowColumn(i, k);
+				slots[i][j] = cardButton;
+				slots[i][j].setMinSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
+				slots[i][j].setMaxSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
 
-		Scene scene = new Scene(root, WIDTH, HEIGHT);
+				slots[i][j].setOnAction(e -> {
+					Card currentCard = (Card) e.getSource();
 
-		return scene;
+					// Logic to faceUp & FaceDown
+					// validate if 2 less cards are faceup
+					if (deck.getFaceUpCardsStatus()) {
+						faceUpCard(currentCard); // UI
+						deck.addFacedUpCard(currentCard);
+					} else {
+						faceDownCards();
+					}
+				});
+				k++;
+			}
+		}
 	}
+
+	public static void addCardsToGrid(GridPane gridPane) {
+		for (int i = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++) {
+				gridPane.add(slots[i][j], j, i + 1);
+			}
+		}
+	}
+
+	public static void faceUpCard(Card cardbutton) {
+		int butsize = 80;
+		Image img = new Image(cardbutton.getCardLocName());
+		ImageView view = new ImageView(img);
+		view.setFitHeight(butsize);
+		view.setPreserveRatio(true);
+		cardbutton.setPrefSize(butsize, butsize);
+		// Setting a graphic to the button
+		cardbutton.setGraphic(view);
+	}
+
+	public static void faceDownCards() {
+		ArrayList<Card> faceUpCards = deck.getFacedUpCards();
+		for (int i = 0; i < faceUpCards.size(); i++) {
+			faceDownCard(faceUpCards.get(i));
+		}
+	}
+
+	// Faces down a specific card
+	public static void faceDownCard(Card cardbutton) {
+		// Setting a graphic to the button
+		cardbutton.setGraphic(null);
+	}
+
+	public Scene playingScene() {
+
+        Label titleBox = new Label("Memory Game");
+        titleBox.setFont(new Font("Helvetica", 45));
+
+        if (deck.isCardMatch()) {
+            Label matchMsg = new Label("Match!");
+            matchMsg.setFont(new Font("Helvetica", 30));
+        } else {
+            Label notMatch = new Label("Not match!");
+            notMatch.setFont(new Font("Helvetica", 30));
+        }
+
+        StackPane stack_pane = new StackPane(titleBox);
+        Scene scene = new Scene(stack_pane, WIDTH, HEIGHT);
+
+        return scene;
+
+    }
+
 
 	// ALSO DONT TOUCH
 	public static void main(String[] args) {
 		createCardPairs();
+		setUpCardLayout();
 		launch(args);
 	}
 
