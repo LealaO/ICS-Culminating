@@ -27,6 +27,8 @@ import javafx.stage.Stage;
 public class GUIDriver extends Application {
 
 	private Stage stg;
+	
+	private static String folderPath = System.getProperty("user.dir");
 
 	private static final double WIDTH = 650;
 	private static final double HEIGHT = 650;
@@ -57,9 +59,8 @@ public class GUIDriver extends Application {
 		Text footerMessage = new Text(220, 610, "Ready to begin?");
 		footerMessage.setFont(Font.font("Helvetica", 30));
 
-		
 		Button startbtn = startScene(root, stage, titleBox, footerMessage);
-		
+
 		// logic
 		startbtn.setOnAction(e -> {
 			stage.setScene(playingScene(titleBox));
@@ -71,13 +72,15 @@ public class GUIDriver extends Application {
 		stage.show();
 	}
 
-
 	public static void createCardPairs() {
 		ArrayList<Card> randomCards = new ArrayList<Card>();
 		for (int i = 0; i < 11; i += 2) {
-			Card card = new Card(i + ".png");
-			randomCards.add(card);
-			randomCards.add(card);
+			Card card1 = new Card(folderPath + "\\" + i + ".png");
+			randomCards.add(card1);
+			Card card2 = new Card(folderPath + "\\" + i + ".png");
+			randomCards.add(card2);
+			
+			//System.out.print(folderPath + "\\" + i + ".png");
 		}
 		Collections.shuffle(randomCards);
 
@@ -102,11 +105,11 @@ public class GUIDriver extends Application {
 					// validate if 2 less cards are faceup
 					if (deck.getFaceUpCardsStatus()) {
 						faceUpCard(currentCard); // UI
-						deck.addFacedUpCard(currentCard);
 					} else {
-						faceDownCards();
+						faceDownCards(currentCard);
 					}
 				});
+
 				k++;
 			}
 		}
@@ -120,22 +123,26 @@ public class GUIDriver extends Application {
 		}
 	}
 
-	public static void faceUpCard(Card cardbutton) {
+	public static void faceUpCard(Card currentCard) {
 		int butsize = 80;
-		Image img = new Image(cardbutton.getCardLocName());
+		Image img = new Image(currentCard.getCardLocName());
 		ImageView view = new ImageView(img);
 		view.setFitHeight(butsize);
 		view.setPreserveRatio(true);
-		cardbutton.setPrefSize(butsize, butsize);
+		currentCard.setPrefSize(butsize, butsize);
 		// Setting a graphic to the button
-		cardbutton.setGraphic(view);
+		currentCard.setGraphic(view);
+
+		deck.addFacedUpCard(currentCard);
 	}
 
-	public static void faceDownCards() {
+	public static void faceDownCards(Card currentCard) {
 		ArrayList<Card> faceUpCards = deck.getFacedUpCards();
 		for (int i = 0; i < faceUpCards.size(); i++) {
 			faceDownCard(faceUpCards.get(i));
 		}
+		deck.removeFaceUpCards();
+		faceUpCard(currentCard);
 	}
 
 	// Faces down a specific card
@@ -237,35 +244,43 @@ public class GUIDriver extends Application {
 	}
 
 	public Scene playingScene(Text titleBox) {
-
 		Pane root = new Pane();
-		
-		Text matchMsg = null;
-        if (deck.isCardMatch()) {
-            matchMsg = new Text(220, 610, "Match!");
-            matchMsg.setFont(new Font("Helvetica", 30));
-        } else {
-        	matchMsg = new Text(220, 610, "Not match!");
-        	matchMsg.setFont(new Font("Helvetica", 30));
-        }
+		GridPane gridPane = new GridPane();
 
-        StackPane stack_pane = new StackPane();
-        
+		setUpCardLayout();
+		addCardsToGrid(gridPane);
+
+		Text matchMsg = null;
+		if (deck.isCardMatch()) {
+			matchMsg = new Text(250, 610, "Match!");
+			matchMsg.setFont(new Font("Helvetica", 30));
+		} else {
+			matchMsg = new Text(250, 610, "Not match!");
+			matchMsg.setFont(new Font("Helvetica", 30));
+		}
+		
+	
 		root.getChildren().add(titleBox);
-		root.getChildren().add(stack_pane); 
+		root.getChildren().add(gridPane);
 		root.getChildren().add(matchMsg);
 
-        Scene scene = new Scene(root, WIDTH, HEIGHT);
+		Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-        return scene;
+		return scene;
 
-    }
+	}
 
+	public Scene endScene() {
+		Pane root = new Pane();
+
+		Scene scene = new Scene(root, WIDTH, HEIGHT);
+
+		return scene;
+	}
 
 	// ALSO DONT TOUCH
 	public static void main(String[] args) {
 		createCardPairs();
-		setUpCardLayout();
 		launch(args);
 	}
 

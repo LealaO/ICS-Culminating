@@ -21,13 +21,13 @@ public class Deck {
 	//Work on
 	public boolean getFaceUpCardsStatus() {
 		int numOfFaceUpCards = faceUpcards.size();
-		if (numOfFaceUpCards <= 2) {
-			return false;
-		}
-		else {
+
+		if (numOfFaceUpCards < 2) {
 			return true;
 		}
-		
+		else {
+			return false;
+		}
 	}
 	
 	public void addFacedUpCard(Card card) {
@@ -40,22 +40,19 @@ public class Deck {
 	
 	
 	public ArrayList<Card> getFacedUpCards() {
-	
 		return faceUpcards;
 	}
-
-	public boolean trackFaceUpCards() {
+	
+	//track the number of correct pairs
+	public boolean trackCorrectFaceUpCards() {
 		
 		return true;
 	}
 	
 	public boolean isCardMatch() {
 		for(int i = 0; i < faceUpcards.size();) {
-			if(faceUpcards.get(i) == faceUpcards.get(i+1)) {
+			if(faceUpcards.get(i).getCardLocName().equals(faceUpcards.get(i+1).getCardLocName())) {
 				return true;
-			}
-			else {
-				return false;
 			}
 		}
 		return false;
