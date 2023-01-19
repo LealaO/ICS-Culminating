@@ -5,11 +5,6 @@ public class GameControl {
 	private int score;
 	private boolean gameOver = true;
 	private int numPairs;
-	
-
-		public static void initializeGame() {
-			
-		}
 		
 		public boolean isTimerOver() {
 			return true;

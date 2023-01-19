@@ -1,7 +1,6 @@
 package OpaoPham;
 
 import java.util.ArrayList;
-// hello
 
 public class Deck {
 	private ArrayList<Card> cards;

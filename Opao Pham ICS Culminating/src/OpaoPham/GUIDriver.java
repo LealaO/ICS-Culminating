@@ -263,9 +263,11 @@ public class GUIDriver extends Application {
 
 		Text matchMsg = null;
 		if (deck.isCardMatch()) {
+			System.out.println(deck.isCardMatch());
 			matchMsg = new Text(250, 610, "Match!");
 			matchMsg.setFont(new Font("Helvetica", 30));
 		} else {
+			System.out.println(deck.isCardMatch());
 			matchMsg = new Text(250, 610, "Not match!");
 			matchMsg.setFont(new Font("Helvetica", 30));
 		}
