@@ -1,12 +1,17 @@
 package OpaoPham;
 
+/**
+ * 
+ * @author Opao, Leala & Pham, Julie
+ *
+ */
 public class GameControl {
 	private boolean playerReady = true;
 	private int score;
 	private boolean gameOver = true;
 	private int numPairs;
 	
-
+	
 		public static void initializeGame() {
 			
 		}

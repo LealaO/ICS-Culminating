@@ -24,9 +24,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Opao, Leala & Pham, Julie
+ *
+ */
 public class GUIDriver extends Application {
-
-	private Stage stg;
 
 	private static String folderPath = System.getProperty("user.dir");
 
@@ -40,9 +43,12 @@ public class GUIDriver extends Application {
 
 	private static Card[][] slots = new Card[NUM_ROWS][NUM_COLS];
 
+	
+	/**
+	 * Stage for the JavaFX program and creates the display.
+	 */
 	@Override
 	public void start(Stage stage) throws Exception {
-		this.stg = stage;
 		Pane root = new Pane();
 
 		// background
@@ -71,7 +77,10 @@ public class GUIDriver extends Application {
 		stage.setScene(TitleScene);
 		stage.show();
 	}
-
+	
+	/**
+	 * Creates card pairs, assigns images to the card pairs and shuffles the deck.
+	 */
 	public static void createCardPairs() {
 		ArrayList<Card> randomCards = new ArrayList<Card>();
 		for (int i = 0; i < 11; i += 2) {
@@ -86,7 +95,10 @@ public class GUIDriver extends Application {
 
 		deck = new Deck(randomCards); // Initialize the Deck
 	}
-
+	
+	/**
+	 * 
+	 */
 	public static void setUpCardLayout() {
 		int k = 0;
 		// setup slots as NewButton objects, creating button
@@ -117,7 +129,11 @@ public class GUIDriver extends Application {
 			}
 		}
 	}
-
+	
+	/**
+	 * 
+	 * @param gridPane
+	 */
 	public static void addCardsToGrid(GridPane gridPane) {
 		for (int i = 0; i < NUM_ROWS; i++) {
 			for (int j = 0; j < NUM_COLS; j++) {
@@ -125,7 +141,11 @@ public class GUIDriver extends Application {
 			}
 		}
 	}
-
+	
+	/**
+	 * 
+	 * @param currentCard
+	 */
 	public static void faceUpCard(Card currentCard) {
 		int butsize = 80;
 		Image img = new Image(currentCard.getCardLocName());
@@ -138,7 +158,11 @@ public class GUIDriver extends Application {
 
 		deck.addFacedUpCard(currentCard);
 	}
-
+	
+	/**
+	 * 
+	 * @param currentCard
+	 */
 	public static void faceDownCards(Card currentCard) {
 		ArrayList<Card> faceUpCards = deck.getFacedUpCards();
 		for (int i = 0; i < faceUpCards.size(); i++) {
@@ -148,7 +172,12 @@ public class GUIDriver extends Application {
 		faceUpCard(currentCard);
 	}
 
+	
 	// Faces down a specific card
+	/**
+	 * 
+	 * @param cardbutton
+	 */
 	public static void faceDownCard(Card cardbutton) {
 		// Setting a graphic to the button
 		cardbutton.setGraphic(null);
@@ -245,7 +274,12 @@ public class GUIDriver extends Application {
 		root.getChildren().add(footerMessage);
 		return startbtn;
 	}
-
+	
+	/**
+	 * 
+	 * @param titleBox
+	 * @return
+	 */
 	public Scene playingScene(Text titleBox) {
 		Pane root = new Pane();
 		GridPane gridPane = new GridPane();
@@ -253,7 +287,7 @@ public class GUIDriver extends Application {
 		setUpCardLayout();
 		addCardsToGrid(gridPane);
 
-		gridPane.setMinSize(200, 100);
+		gridPane.setMinSize(200, 200);
 		gridPane.setPadding(new Insets(20, 20, 20, 20));
 		gridPane.setVgap(50);
 		gridPane.setHgap(50);
@@ -279,7 +313,11 @@ public class GUIDriver extends Application {
 		return scene;
 
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public Scene endScene() {
 		Pane root = new Pane();
 
@@ -288,6 +326,11 @@ public class GUIDriver extends Application {
 		return scene;
 	}
 
+	
+	/**
+	 * 
+	 * @param args
+	 */
 	// ALSO DONT TOUCH
 	public static void main(String[] args) {
 		createCardPairs();
