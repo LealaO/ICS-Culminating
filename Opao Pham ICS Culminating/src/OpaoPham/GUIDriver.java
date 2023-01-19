@@ -43,7 +43,6 @@ public class GUIDriver extends Application {
 
 	private static Card[][] slots = new Card[NUM_ROWS][NUM_COLS];
 
-	
 	/**
 	 * Stage for the JavaFX program and creates the display.
 	 */
@@ -77,7 +76,7 @@ public class GUIDriver extends Application {
 		stage.setScene(TitleScene);
 		stage.show();
 	}
-	
+
 	/**
 	 * Creates card pairs, assigns images to the card pairs and shuffles the deck.
 	 */
@@ -95,7 +94,7 @@ public class GUIDriver extends Application {
 
 		deck = new Deck(randomCards); // Initialize the Deck
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -107,9 +106,9 @@ public class GUIDriver extends Application {
 				Card cardButton = deck.getDeck().get(k);
 				cardButton.setRowColumn(i, k);
 				slots[i][j] = cardButton;
-			//	slots[i][j].setMinSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
-			//	slots[i][j].setMaxSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
-				
+				// slots[i][j].setMinSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
+				// slots[i][j].setMaxSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
+
 				slots[i][j].setMinSize(100, 150);
 				slots[i][j].setMaxSize(100, 150);
 
@@ -129,7 +128,7 @@ public class GUIDriver extends Application {
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param gridPane
@@ -141,7 +140,7 @@ public class GUIDriver extends Application {
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param currentCard
@@ -158,7 +157,7 @@ public class GUIDriver extends Application {
 
 		deck.addFacedUpCard(currentCard);
 	}
-	
+
 	/**
 	 * 
 	 * @param currentCard
@@ -172,7 +171,6 @@ public class GUIDriver extends Application {
 		faceUpCard(currentCard);
 	}
 
-	
 	// Faces down a specific card
 	/**
 	 * 
@@ -274,7 +272,7 @@ public class GUIDriver extends Application {
 		root.getChildren().add(footerMessage);
 		return startbtn;
 	}
-	
+
 	/**
 	 * 
 	 * @param titleBox
@@ -296,15 +294,20 @@ public class GUIDriver extends Application {
 		gridPane.setAlignment(Pos.CENTER);
 
 		Text matchMsg = null;
-		if (deck.isCardMatch()) {
-			System.out.println(deck.isCardMatch());
-			matchMsg = new Text(250, 610, "Match!");
-			matchMsg.setFont(new Font("Helvetica", 30));
-		} else {
-			System.out.println(deck.isCardMatch());
-			matchMsg = new Text(250, 610, "Not match!");
-			matchMsg.setFont(new Font("Helvetica", 30));
-		}
+		int numFaceUpCards = deck.faceUpcards.size();
+		// needs a loop
+		do {
+			if (deck.isCardMatch()) {
+				System.out.println(deck.isCardMatch());
+				matchMsg = new Text(250, 610, "Match!");
+				matchMsg.setFont(new Font("Helvetica", 30));
+			} else {
+				System.out.println(deck.isCardMatch());
+				matchMsg = new Text(250, 610, "Not match!");
+				matchMsg.setFont(new Font("Helvetica", 30));
+			}
+
+		} while (numFaceUpCards < 12);
 
 		root.getChildren().add(titleBox);
 		root.getChildren().add(gridPane);
@@ -315,7 +318,7 @@ public class GUIDriver extends Application {
 		return scene;
 
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -328,7 +331,6 @@ public class GUIDriver extends Application {
 		return scene;
 	}
 
-	
 	/**
 	 * 
 	 * @param args

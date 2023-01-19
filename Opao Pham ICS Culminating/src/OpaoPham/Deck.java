@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Deck {
 	private ArrayList<Card> cards;
-	private ArrayList<Card> faceUpcards = new ArrayList<Card>();
+	public ArrayList<Card> faceUpcards = new ArrayList<Card>();
 	
 	/**
 	 * 
@@ -42,7 +42,6 @@ public class Deck {
 	 */
 	public boolean getFaceUpCardsStatus() {
 		int numOfFaceUpCards = faceUpcards.size();
-
 		if (numOfFaceUpCards < 2) {
 			return true;
 		}
