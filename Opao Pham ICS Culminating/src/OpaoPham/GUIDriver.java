@@ -6,8 +6,10 @@ import java.util.Collections;
 // hi
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -40,6 +42,8 @@ public class GUIDriver extends Application {
 	private static final int NUM_COLS = 4;
 
 	private static Deck deck = null;
+	
+	private static int numFlipCards = 0;
 
 	private static Card[][] slots = new Card[NUM_ROWS][NUM_COLS];
 
@@ -111,22 +115,64 @@ public class GUIDriver extends Application {
 
 				slots[i][j].setMinSize(100, 150);
 				slots[i][j].setMaxSize(100, 150);
-
+				
+				
 				slots[i][j].setOnAction(e -> {
 					Card currentCard = (Card) e.getSource();
 
 					// Logic to faceUp & FaceDown
+					
+					//Find the child "matchMessage" in order to set Text
+					Pane pane = (Pane)currentCard.getParent().getParent();					
+					Text matchMsg = null; //Placeholder for match message			
+					ObservableList<Node> children = pane.getChildren();
+					for (int a = 0; a < children.size(); a++) {
+						Node child = children.get(a);
+						if (child.getId() == "matchMessage") {
+							matchMsg = ((Text)child);
+						}
+					}
+				
+					// Check if previous two cards are matching and set IsCardMatched flag in each card
+					if (deck.isCardMatch()) {
+						ArrayList<Card> cards = deck.getFacedUpCards();
+						for (int c = cards.size() - 2; c < cards.size(); c++) {
+							cards.get(c).setIsCardMatched();
+						}						
+					}
+						
+					
 					// validate if 2 less cards are faceup
 					if (deck.getFaceUpCardsStatus()) {
+
 						faceUpCard(currentCard); // UI
+						int unmatchedCount = deck.getUnmatchedCount();
+												
+						if(unmatchedCount == 2 && !deck.isCardMatch()) {
+							matchMsg.setText("Not Match!");
+							matchMsg.setFont(new Font("Helvetica", 30));
+						}
+						else if (deck.isCardMatch()){
+							System.out.println(deck.isCardMatch());
+							matchMsg.setText("Match!");
+							matchMsg.setFont(new Font("Helvetica", 30));
+						}
+						
 					} else {
+						//Add FlipCount Method
 						faceDownCards(currentCard);
+						countFlipCards();
 					}
 				});
 
 				k++;
 			}
 		}
+	}
+
+	private static void countFlipCards() {
+		numFlipCards++;
+		
 	}
 
 	/**
@@ -164,10 +210,12 @@ public class GUIDriver extends Application {
 	 */
 	public static void faceDownCards(Card currentCard) {
 		ArrayList<Card> faceUpCards = deck.getFacedUpCards();
-		for (int i = 0; i < faceUpCards.size(); i++) {
-			faceDownCard(faceUpCards.get(i));
+		int startpos = faceUpCards.size() - 2;
+		int endpos = faceUpCards.size();
+		for (int i = startpos; i < endpos; i++) {
+			faceDownCard(faceUpCards.get(startpos));
+			faceUpCards.remove(startpos);
 		}
-		deck.removeFaceUpCards();
 		faceUpCard(currentCard);
 	}
 
@@ -281,9 +329,10 @@ public class GUIDriver extends Application {
 	public Scene playingScene(Text titleBox) {
 		Pane root = new Pane();
 		GridPane gridPane = new GridPane();
-
+		
 		setUpCardLayout();
 		addCardsToGrid(gridPane);
+		numFlipCards = 0;
 
 		gridPane.setMinSize(200, 200);
 		gridPane.setPadding(new Insets(20, 20, 20, 20));
@@ -293,21 +342,8 @@ public class GUIDriver extends Application {
 		// Setting the Grid alignment
 		gridPane.setAlignment(Pos.CENTER);
 
-		Text matchMsg = null;
-		int numFaceUpCards = deck.faceUpcards.size();
-		// needs a loop
-		do {
-			if (deck.isCardMatch()) {
-				System.out.println(deck.isCardMatch());
-				matchMsg = new Text(250, 610, "Match!");
-				matchMsg.setFont(new Font("Helvetica", 30));
-			} else {
-				System.out.println(deck.isCardMatch());
-				matchMsg = new Text(250, 610, "Not match!");
-				matchMsg.setFont(new Font("Helvetica", 30));
-			}
-
-		} while (numFaceUpCards < 12);
+		Text matchMsg = new Text(250, 610, "");
+		matchMsg.setId("matchMessage");
 
 		root.getChildren().add(titleBox);
 		root.getChildren().add(gridPane);

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Deck {
 	private ArrayList<Card> cards;
-	public ArrayList<Card> faceUpcards = new ArrayList<Card>();
+	private ArrayList<Card> faceUpcards = new ArrayList<Card>();
 	
 	/**
 	 * 
@@ -41,13 +41,31 @@ public class Deck {
 	 * @return
 	 */
 	public boolean getFaceUpCardsStatus() {
-		int numOfFaceUpCards = faceUpcards.size();
-		if (numOfFaceUpCards < 2) {
+		int unmatchedCount = getUnmatchedCount();
+
+		if (unmatchedCount < 2) {
 			return true;
 		}
 		else {
 			return false;
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public int getUnmatchedCount() {
+		int unmatchedCount = 0;
+		int numOfFaceUpCards = faceUpcards.size();
+		if (numOfFaceUpCards >= 2) {
+			//gets the last two cards and see if one or more of them are unmatched
+			for (int c = numOfFaceUpCards - 2; c < numOfFaceUpCards; c++) {
+				if (!faceUpcards.get(c).getIsCardMatched()) {
+					unmatchedCount++;
+				}
+			}
+		}
+		return unmatchedCount;
 	}
 	
 	/**
@@ -57,14 +75,7 @@ public class Deck {
 	public void addFacedUpCard(Card card) {
 		faceUpcards.add(card);
 	}
-	
-	/**
-	 * 
-	 */
-	public void removeFaceUpCards() {
-		faceUpcards.clear();
-	}
-	
+		
 	/**
 	 * 
 	 * @return
@@ -85,12 +96,13 @@ public class Deck {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isCardMatch() {
-		for(int i = 0; i < faceUpcards.size();) {
-			if(faceUpcards.get(i).getCardLocName().equals(faceUpcards.get(i+1).getCardLocName())) {
+		if (faceUpcards.size() >= 2) {
+			int i = faceUpcards.size() - 2;
+			if (faceUpcards.get(i).getCardLocName().equals(faceUpcards.get(i + 1).getCardLocName())) {
 				return true;
 			}
 		}

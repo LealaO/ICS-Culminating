@@ -11,7 +11,8 @@ public class Card extends Button {
 	// TODO Auto-generated constructor stub
 	private int row;
 	private int column;
-	private String cardLocName ;
+	private String cardLocName;
+	private boolean isMatched = false;
 	
 	/**
 	 * 
@@ -67,6 +68,22 @@ public class Card extends Button {
 	 */
 	public String getCardLocName() {
 		return cardLocName;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean getIsCardMatched() {
+		return isMatched;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public void setIsCardMatched() {
+		isMatched = true;;
 	}
 
 	// to-do toString?
