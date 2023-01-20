@@ -72,7 +72,7 @@ public class GUIDriver extends Application {
 
 		// logic
 		startbtn.setOnAction(e -> {
-			stage.setScene(playingScene(titleBox));
+			stage.setScene(playingScene());
 
 		});
 
@@ -323,10 +323,9 @@ public class GUIDriver extends Application {
 
 	/**
 	 * 
-	 * @param titleBox
 	 * @return
 	 */
-	public Scene playingScene(Text titleBox) {
+	public Scene playingScene() {
 		Pane root = new Pane();
 		GridPane gridPane = new GridPane();
 		
@@ -345,7 +344,6 @@ public class GUIDriver extends Application {
 		Text matchMsg = new Text(250, 610, "");
 		matchMsg.setId("matchMessage");
 
-		root.getChildren().add(titleBox);
 		root.getChildren().add(gridPane);
 		root.getChildren().add(matchMsg);
 
@@ -361,10 +359,27 @@ public class GUIDriver extends Application {
 	 */
 	public Scene endScene() {
 		Pane root = new Pane();
-
+		
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
+		
+		Text titleBox = new Text(185, 50, "CONGRATS!!! U DONE GAME");
+		titleBox.setFont(Font.font("Helvetica", 45));
+		
+		Text footerMessage = new Text(220, 610, "you got ALL THE PAIRS!");
+		footerMessage.setFont(Font.font("Helvetica", 30));
+		
+		Text finalMessage = new Text(220, 610, "THX for playing!");
+		finalMessage.setFont(Font.font("Helvetica", 30));
+		
 
 		return scene;
+	}
+	
+	public void checkEndGame() {
+		// if FaceUpCards == 12, checkEndGame = true
+		// stage.setScene(endScene);
+		// stage.show();
+
 	}
 
 	/**
