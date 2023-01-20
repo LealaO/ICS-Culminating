@@ -2,9 +2,6 @@ package OpaoPham;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-// hi
-
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -153,7 +150,7 @@ public class GUIDriver extends Application {
 							matchMsg.setFont(new Font("Helvetica", 30));
 						}
 						else if (deck.isCardMatch()){
-							System.out.println(deck.isCardMatch());
+							System.out.println(deck.getFacedUpCards().size());
 							matchMsg.setText("Match!");
 							matchMsg.setFont(new Font("Helvetica", 30));
 						}
