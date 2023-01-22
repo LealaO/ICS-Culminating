@@ -50,6 +50,8 @@ public class GUIDriver extends Application {
 	private static int numFlipCards = 0;
 
 	private static Card[][] slots = new Card[NUM_ROWS][NUM_COLS];
+	
+	private static Card lastCard = null;
 
 	private static int timerCounter = 0;
 	/**
@@ -63,7 +65,7 @@ public class GUIDriver extends Application {
 		displayScene(stage, initialScene);
 	}
 
-	TimerTask gameTask = new TimerTask() {
+	private static TimerTask gameTask = new TimerTask() {
 	    public void run() {
 	    	timerCounter++;
 	    	timerMsg.setText("Timer: " + String.valueOf(timerCounter));
@@ -77,7 +79,7 @@ public class GUIDriver extends Application {
 	 * @param stage
 	 * @param root
 	 */
-	public Scene setupNodesForInitialScene(Stage stage) {
+	public static Scene setupNodesForInitialScene(Stage stage) {
 		Pane root = new Pane();
 
 		// background
@@ -193,7 +195,7 @@ public class GUIDriver extends Application {
 	 * @param stage
 	 * @return
 	 */
-	public Scene setupNodesForPlayingScene(Stage stage) {
+	public static Scene setupNodesForPlayingScene(Stage stage) {
 		Pane root = new Pane();
 		GridPane gridPane = new GridPane();
 		
@@ -253,12 +255,16 @@ public class GUIDriver extends Application {
 		Text timerSeconds = new Text(150, 400, "Number of Seconds: " + timerCounter);
 		timerSeconds.setFont(Font.font("Helvetica", 30));
 
+		Text totalScore = new Text(150, 450, "Total Score : " + (1000 - numFlipCards - timerCounter));
+		totalScore.setFont(Font.font("Helvetica", 30));
+
 		Text finalMessage = new Text(220, 610, "THX for playing!");
 		finalMessage.setFont(Font.font("Helvetica", 30));
 
 		root.getChildren().add(titleBox);
 		root.getChildren().add(numFlipsMessage);
 		root.getChildren().add(timerSeconds);
+		root.getChildren().add(totalScore);
 		root.getChildren().add(midMessage);
 		root.getChildren().add(finalMessage);
 
@@ -316,7 +322,6 @@ public class GUIDriver extends Application {
 				slots[i][j].setMinSize(100, 150);
 				slots[i][j].setMaxSize(100, 150);
 				
-				
 				slots[i][j].setOnAction(e -> {
 					Card currentCard = (Card) e.getSource();
 					executeCardActions(currentCard, stage);
@@ -337,32 +342,37 @@ public class GUIDriver extends Application {
 		//Iterates items in Parent Node until it finds specific card
 		Text matchMsg = pullCardFromNode(currentCard);
 
-		// Check if previous two cards are matching and set IsCardMatched flag in each card
-		setMatchedFlagOnCards();
-								
-		// validate if 2 less cards are faceup
-		if (deck.getFaceUpCardsStatus()) {
+		//Validate that cards are not clicked simultaneously
+		if (!currentCard.equals(lastCard)) {
+			// Check if previous two cards are matching and set IsCardMatched flag in each
+			// card
+			setMatchedFlagOnCards();
 
-			faceUpCard(currentCard); // UI
-			int unmatchedCount = deck.getUnmatchedCount();
-									
-			if(unmatchedCount == 2 && !deck.isCardMatch()) {
-				matchMsg.setText("Not Match!");
-				matchMsg.setFont(new Font("Helvetica", 30));
-				countFlipCards();
+			// validate if 2 less cards are faceup
+			if (deck.getFaceUpCardsStatus()) {
+
+				faceUpCard(currentCard); // UI
+				int unmatchedCount = deck.getUnmatchedCount();
+
+				if (unmatchedCount == 2 && !deck.isCardMatch()) {
+					matchMsg.setText("Not Match!");
+					matchMsg.setFont(new Font("Helvetica", 30));
+					countFlipCards();
+				} else if (deck.isCardMatch()) {
+					matchMsg.setText("Match!");
+					matchMsg.setFont(new Font("Helvetica", 30));
+					countFlipCards();
+				}
+
+			} else {
+				// Place Last Two Cards Facedown if they don't match
+				faceDownCards(currentCard);
 			}
-			else if (deck.isCardMatch()){
-				matchMsg.setText("Match!");
-				matchMsg.setFont(new Font("Helvetica", 30));
-				countFlipCards();
-			}
-			
-		} else {
-			//Place Last Two Cards Facedown if they don't match
-			faceDownCards(currentCard);
+
+			checkEndGame(stage);
 		}
 		
-		checkEndGame(stage);
+		lastCard = currentCard;
 	}
 
 	/**
@@ -458,7 +468,8 @@ public class GUIDriver extends Application {
 	
 	public static void checkEndGame(Stage stage) {
 		// if FaceUpCards == 12, checkEndGame = true
-		if(deck.getFacedUpCards().size() == 12) {
+		System.out.print(deck.getFacedUpCards().size());
+		if(deck.getFacedUpCards().size() == 12 && numFlipCards >= 12 ) {
 			displayScene(stage, setupNodesForEndScene());
 		}
 	}
