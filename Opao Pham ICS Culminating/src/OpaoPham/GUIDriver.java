@@ -2,6 +2,9 @@ package OpaoPham;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -31,6 +34,10 @@ import javafx.stage.Stage;
 public class GUIDriver extends Application {
 
 	private static String folderPath = System.getProperty("user.dir");
+	
+	private static Timer gameTimer = new Timer();
+	private static Text timerMsg = new Text(530, 30, "");
+	private static Text flipGameMsg = new Text(5, 30, "");
 
 	private static final double WIDTH = 650;
 	private static final double HEIGHT = 650;
@@ -44,15 +51,37 @@ public class GUIDriver extends Application {
 
 	private static Card[][] slots = new Card[NUM_ROWS][NUM_COLS];
 
+	private static int timerCounter = 0;
 	/**
 	 * Stage for the JavaFX program and creates the display.
 	 */
 	@Override
 	public void start(Stage stage) throws Exception {
+		Scene initialScene = setupNodesForInitialScene(stage);
+
+		// DONT TOUCH
+		displayScene(stage, initialScene);
+	}
+
+	TimerTask gameTask = new TimerTask() {
+	    public void run() {
+	    	timerCounter++;
+	    	timerMsg.setText("Timer: " + String.valueOf(timerCounter));
+	    }
+
+	};
+
+
+	/**
+	 * This is for setting up the Nodes for Initial Scene
+	 * @param stage
+	 * @param root
+	 */
+	public Scene setupNodesForInitialScene(Stage stage) {
 		Pane root = new Pane();
 
 		// background
-		Scene TitleScene = new Scene(root, WIDTH, HEIGHT, Color.MEDIUMPURPLE);
+		Scene titleScene = new Scene(root, WIDTH, HEIGHT, Color.MEDIUMPURPLE);
 
 		// Title of program
 		stage.setTitle("Graphical Memory Game OP");
@@ -65,172 +94,6 @@ public class GUIDriver extends Application {
 		Text footerMessage = new Text(220, 610, "Ready to begin?");
 		footerMessage.setFont(Font.font("Helvetica", 30));
 
-		Button startbtn = startScene(root, stage, titleBox, footerMessage);
-
-		// logic
-		startbtn.setOnAction(e -> {
-			stage.setScene(playingScene());
-
-		});
-
-		// DONT TOUCH
-		stage.setScene(TitleScene);
-		stage.show();
-	}
-
-	/**
-	 * Creates card pairs, assigns images to the card pairs and shuffles the deck.
-	 */
-	public static void createCardPairs() {
-		ArrayList<Card> randomCards = new ArrayList<Card>();
-		for (int i = 0; i < 11; i += 2) {
-			Card card1 = new Card(folderPath + "\\" + i + ".png");
-			randomCards.add(card1);
-			Card card2 = new Card(folderPath + "\\" + i + ".png");
-			randomCards.add(card2);
-
-			// System.out.print(folderPath + "\\" + i + ".png");
-		}
-		Collections.shuffle(randomCards);
-
-		deck = new Deck(randomCards); // Initialize the Deck
-	}
-
-	/**
-	 * 
-	 */
-	public static void setUpCardLayout() {
-		int k = 0;
-		// setup slots as NewButton objects, creating button
-		for (int i = 0; i < NUM_ROWS; i++) {
-			for (int j = 0; j < NUM_COLS; j++) {
-				Card cardButton = deck.getDeck().get(k);
-				cardButton.setRowColumn(i, k);
-				slots[i][j] = cardButton;
-				// slots[i][j].setMinSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
-				// slots[i][j].setMaxSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
-
-				slots[i][j].setMinSize(100, 150);
-				slots[i][j].setMaxSize(100, 150);
-				
-				
-				slots[i][j].setOnAction(e -> {
-					Card currentCard = (Card) e.getSource();
-
-					// Logic to faceUp & FaceDown
-					
-					//Find the child "matchMessage" in order to set Text
-					Pane pane = (Pane)currentCard.getParent().getParent();					
-					Text matchMsg = null; //Placeholder for match message			
-					ObservableList<Node> children = pane.getChildren();
-					for (int a = 0; a < children.size(); a++) {
-						Node child = children.get(a);
-						if (child.getId() == "matchMessage") {
-							matchMsg = ((Text)child);
-						}
-					}
-				
-					// Check if previous two cards are matching and set IsCardMatched flag in each card
-					if (deck.isCardMatch()) {
-						ArrayList<Card> cards = deck.getFacedUpCards();
-						for (int c = cards.size() - 2; c < cards.size(); c++) {
-							cards.get(c).setIsCardMatched();
-						}						
-					}
-						
-					
-					// validate if 2 less cards are faceup
-					if (deck.getFaceUpCardsStatus()) {
-
-						faceUpCard(currentCard); // UI
-						int unmatchedCount = deck.getUnmatchedCount();
-												
-						if(unmatchedCount == 2 && !deck.isCardMatch()) {
-							matchMsg.setText("Not Match!");
-							matchMsg.setFont(new Font("Helvetica", 30));
-						}
-						else if (deck.isCardMatch()){
-							System.out.println(deck.getFacedUpCards().size());
-							matchMsg.setText("Match!");
-							matchMsg.setFont(new Font("Helvetica", 30));
-						}
-						
-					} else {
-						//Add FlipCount Method
-						faceDownCards(currentCard);
-						countFlipCards();
-					}
-				});
-
-				k++;
-			}
-		}
-	}
-
-	private static void countFlipCards() {
-		numFlipCards++;
-		
-	}
-
-	/**
-	 * 
-	 * @param gridPane
-	 */
-	public static void addCardsToGrid(GridPane gridPane) {
-		for (int i = 0; i < NUM_ROWS; i++) {
-			for (int j = 0; j < NUM_COLS; j++) {
-				gridPane.add(slots[i][j], j, i + 1);
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @param currentCard
-	 */
-	public static void faceUpCard(Card currentCard) {
-		int butsize = 80;
-		Image img = new Image(currentCard.getCardLocName());
-		ImageView view = new ImageView(img);
-		view.setFitHeight(butsize);
-		view.setPreserveRatio(true);
-		currentCard.setPrefSize(butsize, butsize);
-		// Setting a graphic to the button
-		currentCard.setGraphic(view);
-
-		deck.addFacedUpCard(currentCard);
-	}
-
-	/**
-	 * 
-	 * @param currentCard
-	 */
-	public static void faceDownCards(Card currentCard) {
-		ArrayList<Card> faceUpCards = deck.getFacedUpCards();
-		int startpos = faceUpCards.size() - 2;
-		int endpos = faceUpCards.size();
-		for (int i = startpos; i < endpos; i++) {
-			faceDownCard(faceUpCards.get(startpos));
-			faceUpCards.remove(startpos);
-		}
-		faceUpCard(currentCard);
-	}
-
-	// Faces down a specific card
-	/**
-	 * 
-	 * @param cardbutton
-	 */
-	public static void faceDownCard(Card cardbutton) {
-		// Setting a graphic to the button
-		cardbutton.setGraphic(null);
-	}
-
-	/**
-	 * @param stage
-	 * @param titleBox
-	 */
-	public Button startScene(Pane root, Stage stage, Text titleBox, Text footerMessage) {
 		VBox rootVB = new VBox();
 		rootVB.setSpacing(30);
 
@@ -314,20 +177,30 @@ public class GUIDriver extends Application {
 
 		root.getChildren().add(titleBox);
 		root.getChildren().addAll(rootVB); // add Vbox inside pane
-		root.getChildren().add(footerMessage);
-		return startbtn;
-	}
+		root.getChildren().add(footerMessage);		
+		
+		// logic
+		startbtn.setOnAction(e -> {
+	    	gameTimer.scheduleAtFixedRate(gameTask, 0, 1000l);
+			displayScene(stage, setupNodesForPlayingScene(stage));
 
+		});
+		return titleScene;
+	}
+		
 	/**
-	 * 
+	 * Sets up Nodes for Play Scene
+	 * @param stage
 	 * @return
 	 */
-	public Scene playingScene() {
+	public Scene setupNodesForPlayingScene(Stage stage) {
 		Pane root = new Pane();
 		GridPane gridPane = new GridPane();
 		
-		setUpCardLayout();
-		addCardsToGrid(gridPane);
+		createCardPairs();
+		constructDeck(stage);
+		addCardsToGridNode(gridPane);
+		
 		numFlipCards = 0;
 
 		gridPane.setMinSize(200, 200);
@@ -340,43 +213,254 @@ public class GUIDriver extends Application {
 
 		Text matchMsg = new Text(250, 610, "");
 		matchMsg.setId("matchMessage");
+		
+		timerMsg.setId("timerMessage");
+		timerMsg.setFont(Font.font("Helvetica", 30));
 
+		flipGameMsg.setText("Number of Flips: 0");
+		flipGameMsg.setId("timerMessage");
+		flipGameMsg.setFont(Font.font("Helvetica", 30));
+		
 		root.getChildren().add(gridPane);
+		root.getChildren().add(timerMsg);
+		root.getChildren().add(flipGameMsg);
 		root.getChildren().add(matchMsg);
 
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
 
 		return scene;
+	}
+	
+	
 
+	/**
+	 * Setup the Nodes for End Scene
+	 * @return
+	 */
+	public static Scene setupNodesForEndScene() {
+		Pane root = new Pane();
+				
+		Text titleBox = new Text(100, 50, "CONGRATS!!! U DONE GAME");
+		titleBox.setFont(Font.font("Helvetica", 30));
+		
+		Text midMessage = new Text(150, 300, "you got ALL THE PAIRS!");
+		midMessage .setFont(Font.font("Helvetica", 30));
+
+		
+		Text numFlipsMessage = new Text(150, 350, "Number of Flips: " + numFlipCards);
+		numFlipsMessage.setFont(Font.font("Helvetica", 30));
+
+		Text timerSeconds = new Text(150, 400, "Number of Seconds: " + timerCounter);
+		timerSeconds.setFont(Font.font("Helvetica", 30));
+
+		Text finalMessage = new Text(220, 610, "THX for playing!");
+		finalMessage.setFont(Font.font("Helvetica", 30));
+
+		root.getChildren().add(titleBox);
+		root.getChildren().add(numFlipsMessage);
+		root.getChildren().add(timerSeconds);
+		root.getChildren().add(midMessage);
+		root.getChildren().add(finalMessage);
+
+		Scene scene = new Scene(root, WIDTH, HEIGHT);
+
+		gameTimer.cancel();	//Stop the timer
+		
+		return scene;
+	}
+
+	/**
+	 * This renders and displays the Scene after all Nodes have been setup
+	 * @param stage
+	 * @param Scene
+	 */
+	public static void displayScene(Stage stage, Scene scene) {
+		stage.setScene(scene);
+		stage.show();
+	}
+
+	/**
+	 * Creates card pairs, assigns images to the card pairs and shuffles the deck.
+	 */
+	public static void createCardPairs() {
+		ArrayList<Card> randomCards = new ArrayList<Card>();
+		for (int i = 0; i < 11; i += 2) {
+			Card card1 = new Card(folderPath + "\\" + i + ".png");
+			randomCards.add(card1);
+			Card card2 = new Card(folderPath + "\\" + i + ".png");
+			randomCards.add(card2);
+
+			// System.out.print(folderPath + "\\" + i + ".png");
+		}
+		Collections.shuffle(randomCards);
+
+		deck = new Deck(randomCards); // Initialize the Deck
+	}
+
+	/**
+	 * Constructs the Deck of Cards and defines what Columns or Rows it belows to.
+	 * Also configures the Action when the Card is Clicked
+	 * @param stage
+	 */
+	public static void constructDeck(Stage stage) {
+		int k = 0;
+		// setup slots as NewButton objects, creating button
+		for (int i = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++) {
+				Card cardButton = deck.getDeck().get(k);
+				cardButton.setRowColumn(i, k);
+				slots[i][j] = cardButton;
+				// slots[i][j].setMinSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
+				// slots[i][j].setMaxSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
+
+				slots[i][j].setMinSize(100, 150);
+				slots[i][j].setMaxSize(100, 150);
+				
+				
+				slots[i][j].setOnAction(e -> {
+					Card currentCard = (Card) e.getSource();
+					executeCardActions(currentCard, stage);
+				});
+
+				k++;
+			}
+		}
+	}
+
+	/**
+	 * This contains all actions that happens when a card is pressed / clicked
+	 * @param currentCard
+	 * @param stage
+	 */
+	public static void executeCardActions(Card currentCard, Stage stage) {
+		
+		//Iterates items in Parent Node until it finds specific card
+		Text matchMsg = pullCardFromNode(currentCard);
+
+		// Check if previous two cards are matching and set IsCardMatched flag in each card
+		setMatchedFlagOnCards();
+								
+		// validate if 2 less cards are faceup
+		if (deck.getFaceUpCardsStatus()) {
+
+			faceUpCard(currentCard); // UI
+			int unmatchedCount = deck.getUnmatchedCount();
+									
+			if(unmatchedCount == 2 && !deck.isCardMatch()) {
+				matchMsg.setText("Not Match!");
+				matchMsg.setFont(new Font("Helvetica", 30));
+				countFlipCards();
+			}
+			else if (deck.isCardMatch()){
+				matchMsg.setText("Match!");
+				matchMsg.setFont(new Font("Helvetica", 30));
+				countFlipCards();
+			}
+			
+		} else {
+			//Place Last Two Cards Facedown if they don't match
+			faceDownCards(currentCard);
+		}
+		
+		checkEndGame(stage);
+	}
+
+	/**
+	 * Iterates through all Faced Up Cards and sets the IsMatched Flag
+	 */
+	public static void setMatchedFlagOnCards() {
+		if (deck.isCardMatch()) {
+			ArrayList<Card> cards = deck.getFacedUpCards();
+			for (int c = cards.size() - 2; c < cards.size(); c++) {
+				cards.get(c).setIsCardMatched();
+			}						
+		}
+	}
+
+	/**
+	 * Iterates items in Parent Node until it finds specific card
+	 * @param currentCard
+	 * @return
+	 */
+	public static Text pullCardFromNode(Card currentCard) {
+		//Find the child "matchMessage" in order to set Text
+		Pane pane = (Pane)currentCard.getParent().getParent();					
+		Text matchMsg = null; //Placeholder for match message			
+		ObservableList<Node> children = pane.getChildren();
+		for (int a = 0; a < children.size(); a++) {
+			Node child = children.get(a);
+			if (child.getId() == "matchMessage") {
+				matchMsg = ((Text)child);
+			}
+		}
+		return matchMsg;
+	}
+
+	private static void countFlipCards() {
+		numFlipCards++;
+		flipGameMsg.setText("Number of Flips: " + String.valueOf(numFlipCards));
+	}
+
+	/**
+	 * Adds cards to Grid Pane
+	 * @param gridPane
+	 */
+	public static void addCardsToGridNode(GridPane gridPane) {
+		for (int i = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++) {
+				gridPane.add(slots[i][j], j, i + 1);
+			}
+		}
 	}
 
 	/**
 	 * 
-	 * @return
+	 * @param currentCard
 	 */
-	public Scene endScene() {
-		Pane root = new Pane();
-		
-		Scene scene = new Scene(root, WIDTH, HEIGHT);
-		
-		Text titleBox = new Text(185, 50, "CONGRATS!!! U DONE GAME");
-		titleBox.setFont(Font.font("Helvetica", 45));
-		
-		Text footerMessage = new Text(220, 610, "you got ALL THE PAIRS!");
-		footerMessage.setFont(Font.font("Helvetica", 30));
-		
-		Text finalMessage = new Text(220, 610, "THX for playing!");
-		finalMessage.setFont(Font.font("Helvetica", 30));
-		
+	public static void faceUpCard(Card currentCard) {
+		int butsize = 80;
+		Image img = new Image(currentCard.getCardLocName());
+		ImageView view = new ImageView(img);
+		view.setFitHeight(butsize);
+		view.setPreserveRatio(true);
+		currentCard.setPrefSize(butsize, butsize);
+		// Setting a graphic to the button
+		currentCard.setGraphic(view);
 
-		return scene;
+		deck.addFacedUpCard(currentCard);
 	}
-	
-	public void checkEndGame() {
-		// if FaceUpCards == 12, checkEndGame = true
-		// stage.setScene(endScene);
-		// stage.show();
 
+	/**
+	 * 
+	 * @param currentCard
+	 */
+	public static void faceDownCards(Card currentCard) {
+		ArrayList<Card> faceUpCards = deck.getFacedUpCards();
+		int startpos = faceUpCards.size() - 2;
+		int endpos = faceUpCards.size();
+		for (int i = startpos; i < endpos; i++) {
+			faceDownCard(faceUpCards.get(startpos));
+			faceUpCards.remove(startpos);
+		}
+		faceUpCard(currentCard);
+	}
+
+	// Faces down a specific card
+	/**
+	 * 
+	 * @param cardbutton
+	 */
+	public static void faceDownCard(Card cardbutton) {
+		// Setting a graphic to the button
+		cardbutton.setGraphic(null);
+	}
+
+	
+	public static void checkEndGame(Stage stage) {
+		// if FaceUpCards == 12, checkEndGame = true
+		if(deck.getFacedUpCards().size() == 12) {
+			displayScene(stage, setupNodesForEndScene());
+		}
 	}
 
 	/**
@@ -385,7 +469,6 @@ public class GUIDriver extends Application {
 	 */
 	// ALSO DONT TOUCH
 	public static void main(String[] args) {
-		createCardPairs();
 		launch(args);
 	}
 
