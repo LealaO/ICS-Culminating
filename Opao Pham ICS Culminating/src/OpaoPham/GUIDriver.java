@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -15,11 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -322,7 +318,7 @@ public class GUIDriver extends Application {
 				
 				slots[i][j].setOnAction(e -> {
 					Card currentCard = (Card) e.getSource();
-					executeCardActions(currentCard, stage, currentCard);
+					executeCardActions(currentCard, stage);
 				});
 
 				k++;
@@ -335,7 +331,7 @@ public class GUIDriver extends Application {
 	 * @param currentCard
 	 * @param stage
 	 */
-	public static void executeCardActions(Card currentCard, Stage stage, Card cardbutton) {
+	public static void executeCardActions(Card currentCard, Stage stage) {
 		
 		//Iterates items in Parent Node until it finds specific card
 		Text matchMsg = pullCardFromNode(currentCard);
