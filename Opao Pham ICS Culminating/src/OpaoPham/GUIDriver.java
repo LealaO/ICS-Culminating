@@ -31,6 +31,8 @@ public class GUIDriver extends Application {
 
 	private static String folderPath = System.getProperty("user.dir");
 	
+	private static Stage stage;
+	
 	private static Timer gameTimer = new Timer();
 	private static Text timerMsg = new Text(530, 30, "");
 	private static Text flipGameMsg = new Text(5, 30, "");
@@ -238,24 +240,32 @@ public class GUIDriver extends Application {
 	public static Scene setupNodesForEndScene() {
 		Pane root = new Pane();
 				
-		Text titleBox = new Text(100, 50, "CONGRATS!!! U DONE GAME");
+		Text titleBox = new Text(120, 50, "CONGRATS!!! U DONE GAME");
 		titleBox.setFont(Font.font("Helvetica", 30));
 		
-		Text midMessage = new Text(150, 300, "you got ALL THE PAIRS!");
+		Text midMessage = new Text(150, 200, "you got ALL THE PAIRS!");
 		midMessage .setFont(Font.font("Helvetica", 30));
 
-		
-		Text numFlipsMessage = new Text(150, 350, "Number of Flips: " + numFlipCards);
+		Text numFlipsMessage = new Text(150, 250, "Number of Flips: " + numFlipCards);
 		numFlipsMessage.setFont(Font.font("Helvetica", 30));
 
-		Text timerSeconds = new Text(150, 400, "Number of Seconds: " + timerCounter);
+		Text timerSeconds = new Text(150, 300, "Number of Seconds: " + timerCounter);
 		timerSeconds.setFont(Font.font("Helvetica", 30));
 
-		Text totalScore = new Text(150, 450, "Total Score : " + (1000 - numFlipCards - timerCounter));
+		Text totalScore = new Text(150, 350, "Total Score : " + (1000 - numFlipCards - timerCounter));
 		totalScore.setFont(Font.font("Helvetica", 30));
 
-		Text finalMessage = new Text(220, 610, "THX for playing!");
+		Text finalMessage = new Text(220, 450, "THX for playing!");
 		finalMessage.setFont(Font.font("Helvetica", 30));
+		
+		Button replaybtn = new Button("Play Again?");
+		replaybtn.setFont(Font.font("Helvetica", 30));
+		replaybtn.setLayoutX(220);
+	    replaybtn.setLayoutY(500);
+	    
+	    replaybtn.setOnAction(e-> {
+	    	displayScene(stage, setupNodesForPlayingScene(stage));
+	    });
 
 		root.getChildren().add(titleBox);
 		root.getChildren().add(numFlipsMessage);
@@ -263,6 +273,7 @@ public class GUIDriver extends Application {
 		root.getChildren().add(totalScore);
 		root.getChildren().add(midMessage);
 		root.getChildren().add(finalMessage);
+		root.getChildren().add(replaybtn);
 
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
 
@@ -469,7 +480,7 @@ public class GUIDriver extends Application {
 	public static void checkEndGame(Stage stage) {
 		// if FaceUpCards == 12, checkEndGame = true
 		System.out.print(deck.getFacedUpCards().size());
-		if(deck.getFacedUpCards().size() == 12 && numFlipCards >= 12 ) {
+		if(deck.getFacedUpCards().size() == 12 && numFlipCards >= 6) {
 			displayScene(stage, setupNodesForEndScene());
 		}
 	}
