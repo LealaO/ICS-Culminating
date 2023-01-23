@@ -316,15 +316,13 @@ public class GUIDriver extends Application {
 				Card cardButton = deck.getDeck().get(k);
 				cardButton.setRowColumn(i, k);
 				slots[i][j] = cardButton;
-				// slots[i][j].setMinSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
-				// slots[i][j].setMaxSize(WIDTH / NUM_COLS, HEIGHT / NUM_ROWS);
 
 				slots[i][j].setMinSize(100, 150);
 				slots[i][j].setMaxSize(100, 150);
 				
 				slots[i][j].setOnAction(e -> {
 					Card currentCard = (Card) e.getSource();
-					executeCardActions(currentCard, stage);
+					executeCardActions(currentCard, stage, currentCard);
 				});
 
 				k++;
@@ -337,15 +335,14 @@ public class GUIDriver extends Application {
 	 * @param currentCard
 	 * @param stage
 	 */
-	public static void executeCardActions(Card currentCard, Stage stage) {
+	public static void executeCardActions(Card currentCard, Stage stage, Card cardbutton) {
 		
 		//Iterates items in Parent Node until it finds specific card
 		Text matchMsg = pullCardFromNode(currentCard);
 
 		//Validate that cards are not clicked simultaneously
 		if (!currentCard.equals(lastCard)) {
-			// Check if previous two cards are matching and set IsCardMatched flag in each
-			// card
+			// Check if previous two cards are matching and set IsCardMatched flag in each card
 			setMatchedFlagOnCards();
 
 			// validate if 2 less cards are faceup
@@ -362,6 +359,13 @@ public class GUIDriver extends Application {
 					matchMsg.setText("Match!");
 					matchMsg.setFont(new Font("Helvetica", 30));
 					countFlipCards();
+					
+					Button faceUpCards = new Button();
+					for (int i=0; i <deck.getFacedUpCards().size(); i++) {
+						faceUpCards = deck.getFacedUpCards().get(i);
+						faceUpCards.setDisable(true);
+					}
+					
 				}
 
 			} else {
