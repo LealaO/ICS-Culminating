@@ -110,13 +110,13 @@ public class GUIDriver extends GameControl {
 
 		// Left Image
 		Image leftImage = new Image(
-				"https://cdn0.iconfinder.com/data/icons/symbols-symbols-add-on-3-vol-1/48/v-29-512.png", 150, 0, true,
+				"https://i.imgur.com/vELAhe1.png", 150, 0, true,
 				false);
 		gridpaneVB4.add(new ImageView(leftImage), 0, 0);
 
 		// Right Image
 		Image rightImage = new Image(
-				"https://cdn0.iconfinder.com/data/icons/symbols-symbols-add-on-3-vol-1/48/v-29-512.png", 150, 0, true,
+				"https://i.imgur.com/JFmPcJE.png", 150, 0, true,
 				false);
 		gridpaneVB4.add(new ImageView(rightImage), 1, 0);
 		
