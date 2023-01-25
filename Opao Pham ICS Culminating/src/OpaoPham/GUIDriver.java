@@ -17,15 +17,15 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * 
+ * A memory card game made in JavaFX using buttons and scene changes.
  * @author Opao, Leala & Pham, Julie
  *
  */
 public class GUIDriver extends GameControl {
 
-	protected static Stage stage;
-	protected static Text timerMsg = new Text(530, 30, ""); 
-	protected static Text flipGameMsg = new Text(5, 30, "");
+	private static Stage stage;
+	private static Text timerMsg = new Text(530, 30, ""); 
+	private static Text flipGameMsg = new Text(5, 30, "");
 	private static final double WIDTH = 650; 
 	private static final double HEIGHT = 650;
 
@@ -43,8 +43,8 @@ public class GUIDriver extends GameControl {
 
 	/**
 	 * This is for setting up the Nodes for Initial Scene
-	 * @param stage
-	 * @param root
+	 * @param stage - Stage for the Scene to perform on
+	 * @return titleScene - Shows the title screen on the display
 	 */
 	public static Scene setupNodesForInitialScene(Stage stage) {
 		Pane root = new Pane();
@@ -178,9 +178,9 @@ public class GUIDriver extends GameControl {
 	}
 	
 	/**
-	 * Sets up Nodes for Play Scene
-	 * @param stage
-	 * @return
+	 * Sets up Nodes for the Playing Scene
+	 * @param stage - Stage for the Scene to perform on
+	 * @return Scene currentPlayingScene - Updates the playing scene based on player-input
 	 */
 	public static Scene setupNodesForPlayingScene(Stage stage, Scene endscene) {
 		Pane root = new Pane();
@@ -193,7 +193,7 @@ public class GUIDriver extends GameControl {
 		resetNuberOfFlippedCards();
 
 		gridPane.setMinSize(200, 200);
-		gridPane.setPadding(new Insets(20, 20, 20, 20));
+		gridPane.setPadding(new Insets(20, 20, 20, 50));
 		gridPane.setVgap(50);
 		gridPane.setHgap(50);
 
@@ -215,16 +215,14 @@ public class GUIDriver extends GameControl {
 		root.getChildren().add(flipGameMsg);
 		root.getChildren().add(matchMsg);
 
-		Scene currentPlayingSccene = new Scene(root, WIDTH, HEIGHT);
+		Scene currentPlayingScene = new Scene(root, WIDTH, HEIGHT);
 
-		return currentPlayingSccene;
+		return currentPlayingScene;
 	}
 	
-	
-
 	/**
-	 * Setup the Nodes for End Scene
-	 * @return
+	 * Setup the Nodes for the End Screen Scene.
+	 * @return scene - Returns the end screen scene.
 	 */
 	public static Scene setupNodesForEndScene() {
 		Pane root = new Pane();
@@ -273,7 +271,7 @@ public class GUIDriver extends GameControl {
 	}
 	
 	/**
-	 * 
+	 * Launches the JavaFX Application.
 	 * @param args
 	 */
 	// ALSO DONT TOUCH
