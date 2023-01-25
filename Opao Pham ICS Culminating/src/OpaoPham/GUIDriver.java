@@ -94,11 +94,11 @@ public class GUIDriver extends GameControl {
 		gridpaneVB3.setVgap(1);
 		gridpaneVB3.setAlignment(Pos.CENTER);
 
-		Text message3 = new Text("1. The number of times you have flipped a card is a deduction to your total score");
+		Text message3 = new Text("1. The number of times you flip open a pair is a deduction from your total score.");
 		message3.setFont(Font.font("Helvetica", 17));
 		gridpaneVB3.add(message3, 0, 1);
 
-		Text message4 = new Text("2. You also have set number of lives");
+		Text message4 = new Text("2. The time it takes for you to finish is also a deduction from your total socre.");
 		message4.setFont(Font.font("Helvetica", 17));
 		gridpaneVB3.add(message4, 0, 2);
 
