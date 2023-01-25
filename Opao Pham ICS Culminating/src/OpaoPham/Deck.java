@@ -3,7 +3,7 @@ package OpaoPham;
 import java.util.ArrayList;
 
 /**
- * 
+ * Class for creating a card deck (ArrayList) of total cards and face-up cards.
  * @author Opao, Leala & Pham, Julie
  *
  */
@@ -12,7 +12,7 @@ public class Deck {
 	private ArrayList<Card> faceUpcards = new ArrayList<Card>();
 	
 	/**
-	 * 
+	 * Creates a deck of cards.
 	 * @param pcards
 	 */
 	public Deck(ArrayList<Card> pcards) {
@@ -20,7 +20,7 @@ public class Deck {
 	}
 	
 	/**
-	 * 
+	 * Assigns an ArrayList of cards to the deck of cards.
 	 * @param pcards
 	 */
 	public void setDeck(ArrayList<Card> pcards) {
@@ -28,17 +28,16 @@ public class Deck {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns the deck.
+	 * @return cards
 	 */
 	public ArrayList<Card> getDeck() {
 		return cards;
 	}
-	
-	//Work on
+
 	/**
-	 * 
-	 * @return
+	 * Returns if the face up cards
+	 * @return boolean
 	 */
 	public boolean getFaceUpCardsStatus() {
 		int unmatchedCount = getUnmatchedCount();
@@ -52,7 +51,8 @@ public class Deck {
 	}
 
 	/**
-	 * @return
+	 * Gets the amount of unmatched cards
+	 * @return unmatchedCount
 	 */
 	public int getUnmatchedCount() {
 		int unmatchedCount = 0;
@@ -69,35 +69,32 @@ public class Deck {
 	}
 	
 	/**
-	 * 
-	 * @param card
+	 * Adds card to the face-up cards deck.
+	 * @param card - Card that is revealed to the player
 	 */
 	public void addFacedUpCard(Card card) {
 		faceUpcards.add(card);
 	}
 		
 	/**
-	 * 
-	 * @return
+	 * Returns ArrayList of face-up cards.
+	 * @return faceUpcards - deck of face-up cards.
 	 */
 	public ArrayList<Card> getFacedUpCards() {
 		return faceUpcards;
 	}
 	
-	
 	/**
-	 * 
-	 * @return
+	 * Track the number of correct pairs
+	 * @return true
 	 */
-	//track the number of correct pairs
 	public boolean trackCorrectFaceUpCards() {
-		
 		return true;
 	}
 	
 	/**
-	 *
-	 * @return
+	 * Check if the selected cards are a match or not
+	 * @return boolean
 	 */
 	public boolean isCardMatch() {
 		if (faceUpcards.size() >= 2) {
@@ -108,8 +105,6 @@ public class Deck {
 		}
 		return false;
 		
-		
 	}
-
 
 }

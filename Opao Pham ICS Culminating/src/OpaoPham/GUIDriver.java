@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * A memory card game made in JavaFX using buttons and scene changes.
+ * A memory card game made in JavaFX using buttons, graphics and scene changes.
  * @author Opao, Leala & Pham, Julie
  *
  */
@@ -43,8 +43,8 @@ public class GUIDriver extends GameControl {
 
 	/**
 	 * This is for setting up the Nodes for Initial Scene
-	 * @param stage - Stage for the Scene to perform on
-	 * @return titleScene - Shows the title screen on the display
+	 * @param stage - Display for the JavaFX
+	 * @return titleScene - Chosen scene to be displayed in the application
 	 */
 	public static Scene setupNodesForInitialScene(Stage stage) {
 		Pane root = new Pane();
@@ -98,9 +98,13 @@ public class GUIDriver extends GameControl {
 		message3.setFont(Font.font("Helvetica", 17));
 		gridpaneVB3.add(message3, 0, 1);
 
-		Text message4 = new Text("2. The time it takes for you to finish is also a deduction from your total socre.");
+		Text message4 = new Text("2. The time it takes for you to finish is also a deduction from your total score.");
 		message4.setFont(Font.font("Helvetica", 17));
 		gridpaneVB3.add(message4, 0, 2);
+		
+		Text message5 = new Text("Displayed below are the cards you will find in the game!");
+		message5.setFont(Font.font("Helvetica", 17));
+		gridpaneVB3.add(message5, 0, 3);
 
 		// VBRow 4
 		GridPane gridpaneVB4 = new GridPane();
@@ -179,7 +183,7 @@ public class GUIDriver extends GameControl {
 	
 	/**
 	 * Sets up Nodes for the Playing Scene
-	 * @param stage - Stage for the Scene to perform on
+	 * @param stage - Display for the JavaFX
 	 * @return Scene currentPlayingScene - Updates the playing scene based on player-input
 	 */
 	public static Scene setupNodesForPlayingScene(Stage stage, Scene endscene) {
@@ -190,7 +194,7 @@ public class GUIDriver extends GameControl {
 		constructDeck(stage, endscene, flipGameMsg);
 		addCardsToGridNode(gridPane);
 		
-		resetNuberOfFlippedCards();
+		resetNumberOfFlippedCards();
 
 		gridPane.setMinSize(200, 200);
 		gridPane.setPadding(new Insets(20, 20, 20, 50));
@@ -227,8 +231,8 @@ public class GUIDriver extends GameControl {
 	public static Scene setupNodesForEndScene() {
 		Pane root = new Pane();
 		
-		Text titleBox = new Text(120, 50, "MEMORY GAME: COMPLETE");
-		titleBox.setFont(Font.font("Helvetica", 30));
+		Text titleBox = new Text(100, 100, "MEMORY GAME: COMPLETE");
+		titleBox.setFont(Font.font("Helvetica", 40));
 		
 		Text midMessage = new Text(150, 200, "you got ALL THE PAIRS!");
 		midMessage .setFont(Font.font("Helvetica", 30));
@@ -245,7 +249,7 @@ public class GUIDriver extends GameControl {
 		totalScore .setId("ScoreMessage");
 		totalScore.setFont(Font.font("Helvetica", 30));
 
-		Text finalMessage = new Text(220, 450, "Thanks for playing!");
+		Text finalMessage = new Text(200, 450, "Thanks for playing!");
 		finalMessage.setFont(Font.font("Helvetica", 30));
 		
 		Button replaybtn = new Button("Play Again?");

@@ -3,12 +3,11 @@ package OpaoPham;
 import javafx.scene.control.Button;
 
 /**
- * 
+ * Class for converting the cards into click-able buttons.
  * @author Opao, Leala & Pham, Julie
  *
  */
 public class Card extends Button {
-	// TODO Auto-generated constructor stub
 	private int row;
 	private int column;
 	private String cardLocName;
@@ -24,10 +23,10 @@ public class Card extends Button {
 	}
 	
 	/**
-	 * 
-	 * @param r
-	 * @param c
-	 * @param cln
+	 * Creates a card class
+	 * @param r - Input for row value
+	 * @param c - Input for column value
+	 * @param cln - Card name
 	 */
 	public Card(int r, int c, String cln) {
 		super();
@@ -37,9 +36,9 @@ public class Card extends Button {
 	}
 	
 	/**
-	 * 
-	 * @param r
-	 * @param c
+	 * Sets row and column values.
+	 * @param r - Input for row value
+	 * @param c - Input for column value
 	 */
 	public void setRowColumn(int r, int c) {
 		row = r;
@@ -47,44 +46,42 @@ public class Card extends Button {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns row value.
+	 * @return row
 	 */
 	public int getRow() {
 		return row;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns column value.
+	 * @return column
 	 */
 	public int getColumn() {
 		return column;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns cardLocName.
+	 * @return cardLocName - Card value
 	 */
 	public String getCardLocName() {
 		return cardLocName;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns isMatched
+	 * @return isMatched - Does the card have a match
 	 */
 	public boolean getIsCardMatched() {
 		return isMatched;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Sets isMatched to true
 	 */
 	public void setIsCardMatched() {
-		isMatched = true;;
+		isMatched = true;
 	}
 
-	// to-do toString?
 }

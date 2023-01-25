@@ -20,7 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * 
+ * Class that creates the game mechanics and gimmicks
  * @author Opao, Leala & Pham, Julie
  *
  */
@@ -45,15 +45,18 @@ public class GameControl extends Application  {
 		// Not used in Game Control
 		
 	}
-		
-	protected static void resetNuberOfFlippedCards() {
+	
+	/**
+	 * Resets number of flipped-up cards to 0.
+	 */
+	protected static void resetNumberOfFlippedCards() {
 		numFlipCards = 0;
 	}
 
 	/**
 	 * Starts the Game when the Start Game Button is pressed
-	 * @param stage
-	 * @param scene 
+	 * @param stage - Display for the JavaFX
+	 * @param scene - Chosen scene to be displayed in the application
 	 */
 	protected static void executeStartGame(Stage stage, Text timerMsg, Scene scene) {
 		gameTimer = new Timer();
@@ -71,8 +74,8 @@ public class GameControl extends Application  {
 
 	/**
 	 * This renders and displays the Scene after all Nodes have been setup
-	 * @param stage
-	 * @param Scene
+	 * @param stage - Display for the JavaFX
+	 * @param scene - Chosen scene to be displayed in the application
 	 */
 	public static void displayScene(Stage stage, Scene scene) {
 		stage.setScene(scene);
@@ -100,7 +103,7 @@ public class GameControl extends Application  {
 	/**
 	 * Constructs the Deck of Cards and defines what Columns or Rows it belows to.
 	 * Also configures the Action when the Card is Clicked
-	 * @param stage
+	 * @param stage - Display for the JavaFX
 	 */
 	public static void constructDeck(Stage stage, Scene endscene, Text flipGameMsg) {
 		int k = 0;
@@ -126,8 +129,8 @@ public class GameControl extends Application  {
 
 	/**
 	 * This contains all actions that happens when a card is pressed / clicked
-	 * @param currentCard
-	 * @param stage
+	 * @param currentCard - Current card that was selected
+	 * @param stage - Display for the JavaFX
 	 */
 	public static void executeCardActions(Card currentCard, Stage stage, Scene endscene, Text flipGameMsg) {
 		
@@ -187,8 +190,8 @@ public class GameControl extends Application  {
 
 	/**
 	 * Iterates items in Parent Node until it finds specific card
-	 * @param currentCard
-	 * @return
+	 * @param currentCard - Current card that was selectesd
+	 * @return matchMsg - Label that states if the cards are matched or not
 	 */
 	public static Text pullCardFromNode(Card currentCard) {
 		//Find the child "matchMessage" in order to set Text
@@ -203,7 +206,11 @@ public class GameControl extends Application  {
 		}
 		return matchMsg;
 	}
-
+	
+	/**
+	 * 
+	 * @param flipGameMsg - Change the integer value of number of Flips in this Text.
+	 */
 	private static void countFlipCards(Text flipGameMsg) {
 		numFlipCards++;
 		flipGameMsg.setText("Number of Flips: " + String.valueOf(numFlipCards));
@@ -222,8 +229,8 @@ public class GameControl extends Application  {
 	}
 
 	/**
-	 * 
-	 * @param currentCard
+	 * Faces up a specific card.
+	 * @param currentCard - Current card that was selected
 	 */
 	public static void faceUpCard(Card currentCard) {
 		int butsize = 80;
@@ -239,8 +246,8 @@ public class GameControl extends Application  {
 	}
 
 	/**
-	 * 
-	 * @param currentCard
+	 * Faces down a specific card.
+	 * @param currentCard - Current card that was seleceted
 	 */
 	public static void faceDownCards(Card currentCard) {
 		ArrayList<Card> faceUpCards = deck.getFacedUpCards();
@@ -253,17 +260,19 @@ public class GameControl extends Application  {
 		faceUpCard(currentCard);
 	}
 
-	// Faces down a specific card
 	/**
-	 * 
+	 * Sets a graphic to the button.
 	 * @param cardbutton
 	 */
 	public static void faceDownCard(Card cardbutton) {
-		// Setting a graphic to the button
 		cardbutton.setGraphic(null);
 	}
 
-	
+	/**
+	 * Checks if the game has ended or not.
+	 * @param stage - Display for the JavaFX
+	 * @param endscene - Chosen scene to be displayed in the application
+	 */
 	public static void checkEndGame(Stage stage, Scene endscene) {
 		// if FaceUpCards == 12, checkEndGame = true
 		if(deck.getFacedUpCards().size() == 12 && numFlipCards >= 6) {
