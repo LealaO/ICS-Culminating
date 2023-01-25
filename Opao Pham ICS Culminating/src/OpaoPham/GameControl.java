@@ -266,7 +266,6 @@ public class GameControl extends Application  {
 	
 	public static void checkEndGame(Stage stage, Scene endscene) {
 		// if FaceUpCards == 12, checkEndGame = true
-		System.out.print(deck.getFacedUpCards().size());
 		if(deck.getFacedUpCards().size() == 12 && numFlipCards >= 6) {
 			
 			Parent rootView = endscene.getRoot();

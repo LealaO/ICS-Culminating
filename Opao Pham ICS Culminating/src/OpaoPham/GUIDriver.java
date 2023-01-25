@@ -108,17 +108,36 @@ public class GUIDriver extends GameControl {
 		gridpaneVB4.setVgap(1);
 		gridpaneVB4.setAlignment(Pos.CENTER);
 
-		// Left Image
-		Image leftImage = new Image(
-				"https://i.imgur.com/vELAhe1.png", 150, 0, true,
+		//Preview Images
+		Image Image0 = new Image(
+				"https://i.imgur.com/fHghMHm.png", 100, 0, true,
 				false);
-		gridpaneVB4.add(new ImageView(leftImage), 0, 0);
+		gridpaneVB4.add(new ImageView(Image0), 0, 0);
 
-		// Right Image
-		Image rightImage = new Image(
-				"https://i.imgur.com/JFmPcJE.png", 150, 0, true,
+		Image Image2 = new Image(
+				"https://i.imgur.com/jT39UWS.png", 100, 0, true,
 				false);
-		gridpaneVB4.add(new ImageView(rightImage), 1, 0);
+		gridpaneVB4.add(new ImageView(Image2), 1, 0);
+		
+		Image Image4 = new Image(
+				"https://i.imgur.com/8oepfm1.png", 100, 0, true,
+				false);
+		gridpaneVB4.add(new ImageView(Image4), 2, 0);
+		
+		Image Image6 = new Image(
+				"https://i.imgur.com/WHdpld6.png", 100, 0, true,
+				false);
+		gridpaneVB4.add(new ImageView(Image6), 3, 0);
+		
+		Image Image8 = new Image(
+				"https://i.imgur.com/pzs7TSp.png", 100, 0, true,
+				false);
+		gridpaneVB4.add(new ImageView(Image8), 4, 0);
+		
+		Image Image10 = new Image(
+				"https://i.imgur.com/q6lgvZz.png", 100, 0, true,
+				false);
+		gridpaneVB4.add(new ImageView(Image10), 5, 0);
 		
 		//Start game button
 		GridPane gridpaneVBB = new GridPane();
@@ -210,7 +229,7 @@ public class GUIDriver extends GameControl {
 	public static Scene setupNodesForEndScene() {
 		Pane root = new Pane();
 		
-		Text titleBox = new Text(120, 50, "CONGRATS!!! U DONE GAME");
+		Text titleBox = new Text(120, 50, "MEMORY GAME: COMPLETE");
 		titleBox.setFont(Font.font("Helvetica", 30));
 		
 		Text midMessage = new Text(150, 200, "you got ALL THE PAIRS!");
@@ -228,7 +247,7 @@ public class GUIDriver extends GameControl {
 		totalScore .setId("ScoreMessage");
 		totalScore.setFont(Font.font("Helvetica", 30));
 
-		Text finalMessage = new Text(220, 450, "THX for playing!");
+		Text finalMessage = new Text(220, 450, "Thanks for playing!");
 		finalMessage.setFont(Font.font("Helvetica", 30));
 		
 		Button replaybtn = new Button("Play Again?");
